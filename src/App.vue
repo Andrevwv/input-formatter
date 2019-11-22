@@ -15,6 +15,11 @@
         Input mask: {{ postalCodePlaceholder }}
         <InputFormatter :placeholder="postalCodePlaceholder" v-model="postalCode" :mask="postalCodePlaceholder"/>
       </label>
+
+      <label class="label">
+        Input mask: {{ creditCardPlaceholder }}
+        <InputFormatter :placeholder="creditCardPlaceholder" v-model="creditCard" :mask="creditCardPlaceholder"/>
+      </label>
     </form>
   </div>
 </template>
@@ -33,9 +38,11 @@ export default Vue.extend({
       phone: '',
       date: '',
       postalCode: '',
+      creditCard: '',
       phonePlaceholder: '+11 (111) 111 11',
       datePlaceholder: 'dd.mm.yyyy',
-      postalCodePlaceholder: '11 22 MM',
+      postalCodePlaceholder: '1122 MM',
+      creditCardPlaceholder: '1234 1234 1234 1234',
     };
   },
 });
@@ -56,6 +63,6 @@ export default Vue.extend({
 .label {
   display: block;
   margin: 50px auto 0;
-  width: 50%;
+  width: 400px;
 }
 </style>
