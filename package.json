@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@syncfusion/ej2-vue-buttons": "^17.3.27",
+    "@syncfusion/ej2-vue-inputs": "^17.3.28",
     "core-js": "^3.3.2",
     "vue": "^2.6.10"
   },
