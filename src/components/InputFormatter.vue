@@ -1,11 +1,16 @@
 <template>
-  <ejs-textbox
-    v-bind="$attrs"
-    v-bind:value="value"
-    v-on="inputListeners"
-    :placeholder="placeholder"
-  >
-  </ejs-textbox>
+  <div>
+    <div class="e-input-group  e-warning" :class="{'e-error': isErrorMessage}">
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on="inputListeners"
+        :placeholder="placeholder"
+        class="e-input"
+      >
+    </div>
+    <div class="error" v-if="isErrorMessage">Not enough characters</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -14,6 +19,11 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'InputFormatter',
   inheritAttrs: false,
+  data() {
+    return {
+      isErrorMessage: false,
+    }
+  },
   props: {
     mask: String,
     value: String,
@@ -26,11 +36,11 @@ export default Vue.extend({
         this.$listeners,
         {
           input(event: any) {
-            vm.$emit('input', event.value);
+            vm.$emit('input', event.target.value);
           },
           blur(event: any) {
               vm.$emit('input', vm.makeValueFormatted());
-              vm.$emit('blur', event.value);
+              vm.$emit('blur', event.target.value);
           },
         },
       );
@@ -59,15 +69,24 @@ export default Vue.extend({
       if (!this.normalizeString(finalString)) {
         return '';
       }
+      this.setErrorMessage();
       return finalString.trim();
     },
     normalizeString(value: string) {
       return value.replace(/[^A-Z0-9]+/gi, '');
+    },
+    setErrorMessage() {
+      console.log(this.mask.length, 'this.mask.length');
+      console.log(this.value.length, 'this.value.length');
+      console.log(this.value.length < this.mask.length);
+      this.isErrorMessage = this.value.length < this.mask.length;
     },
   },
 });
 </script>
 
 <style scoped lang="scss">
-
+.error {
+  color: red;
+}
 </style>
