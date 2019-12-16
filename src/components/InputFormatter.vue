@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="e-input-group  e-warning" :class="{'e-error': isErrorMessage}">
+    <div class="e-input-group" :class="{'e-error': isErrorMessage}">
       <input
         v-bind="$attrs"
         v-bind:value="value"
@@ -54,12 +54,15 @@ export default Vue.extend({
       for (let maskCharIndex = 0, valueCharIndex = 0; maskCharIndex < this.mask.length; maskCharIndex++) {
         const maskChar = this.mask.charAt(maskCharIndex);
         const valueChar = valueWithoutSymbols.charAt(valueCharIndex);
-
         if (/[a-z0-9]/i.test(maskChar)) {
-          if (maskChar === maskChar.toUpperCase()) {
-            finalString += valueChar.toUpperCase();
-          } else if (maskChar === maskChar.toLowerCase()) {
-            finalString += valueChar.toLowerCase();
+          if(/[a-z]/i.test(valueChar) && /[a-z]/i.test(maskChar)) {
+            if (maskChar === maskChar.toUpperCase()) {
+              finalString += valueChar.toUpperCase();
+            } else if (maskChar === maskChar.toLowerCase()) {
+              finalString += valueChar.toLowerCase();
+            }
+          } else if (/[0-9]/i.test(valueChar) && /[0-9]/i.test(maskChar)) {
+            finalString += valueChar;
           }
           valueCharIndex++;
         } else {
@@ -69,17 +72,15 @@ export default Vue.extend({
       if (!this.normalizeString(finalString)) {
         return '';
       }
-      this.setErrorMessage();
-      return finalString.trim();
+      const trimedFinalString = finalString.trim()
+      this.setErrorMessage(trimedFinalString);
+      return trimedFinalString;
     },
     normalizeString(value: string) {
       return value.replace(/[^A-Z0-9]+/gi, '');
     },
-    setErrorMessage() {
-      console.log(this.mask.length, 'this.mask.length');
-      console.log(this.value.length, 'this.value.length');
-      console.log(this.value.length < this.mask.length);
-      this.isErrorMessage = this.value.length < this.mask.length;
+    setErrorMessage(value: String) {
+      this.isErrorMessage = value.length < this.mask.length;
     },
   },
 });
